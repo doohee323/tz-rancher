@@ -78,7 +78,7 @@ sudo vi /etc/hosts
 
 mkdir /root/.ssh
 cat <<EOF | sudo tee /root/.ssh/authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC72NWXLwmtq3Q54e3V35knswCZO20e4dxRrOOcdt3shFUc/quP4f37HPRNUqda5L/N//3rDTxU8R/iBCNyKjcSrszjBNLmtncyEWRb/19ljMU2QPh1899BFA8MZMe4H13ocy08/Ph4OBGui+5aJ6TPHhWNanMOly9KsI7zqrV63XTArh8RNoxBXshAOb39vAbnlvTmVd0htn4e5kJjZ3FGgK/ukfks7Zk64hLQFbo1GiIq6DiaRDWVRgcQV019Ex+rC0DG5BhMuCV55oPLneMTlVWz+gT3TxnwCe0NFckixcmNcGjjDJrA1ag8+a6RheG9rF+Pge0M/HMdkMKBji3/ vagrant
+ssh-rsa aaaaa
 EOF
 chmod 600 /root/.ssh/authorized_keys
 
