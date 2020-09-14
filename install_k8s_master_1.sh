@@ -157,7 +157,7 @@ cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/00
 
 cat <<EOF | sudo tee /etc/apache2/sites-available/000-default.conf
 <VirtualHost *:80>
-  ServerName dooheehong323
+  ServerName k8s-master
 
   SSLEngine off
   ProxyPreserveHost On
@@ -175,7 +175,7 @@ cat <<EOF | sudo tee /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 
 <VirtualHost *:443>
-  ServerName dooheehong323
+  ServerName k8s-master
 
   SSLEngine on
   
@@ -198,10 +198,10 @@ cat <<EOF | sudo tee /etc/apache2/sites-available/000-default.conf
 EOF
 
 sudo service apache2 restart
-#sudo service apache2 status
+#sudo service apache2 status 
 
 curl http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/.
-curl https://dooheehong323/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+curl https://k8s-master/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 
 exit 0
 
