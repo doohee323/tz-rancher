@@ -65,6 +65,12 @@ doohee323@master-1:/Volumes/workspace/etc/tz-k8s-vagrant$ vagrant reload
 vagrant up
 #vagrant reload
 
+# make key in vagrant host (master-1, rancher host, ~18.155)
+ssh-keygen -t rsa -C vagrant -P "" -f ~/.ssh/vagrant -q
+chmod 400 ~/.ssh/vagrant
+ssh-agent
+ssh-add ~/.ssh/vagrant
+
 ##########################################
 # in k8s host (~63.220, ~20-96)
 ##########################################
@@ -78,7 +84,7 @@ sudo vi /etc/hosts
 
 mkdir /root/.ssh
 cat <<EOF | sudo tee /root/.ssh/authorized_keys
-ssh-rsa aaaaa
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC72NWXLwmtq3Q54e3V35knswCZO20e4dxRrOOcdt3shFUc/quP4f37HPRNUqda5L/N//3rDTxU8R/iBCNyKjcSrszjBNLmtncyEWRb/19ljMU2QPh1899BFA8MZMe4H13ocy08/Ph4OBGui+5aJ6TPHhWNanMOly9KsI7zqrV63XTArh8RNoxBXshAOb39vAbnlvTmVd0htn4e5kJjZ3FGgK/ukfks7Zk64hLQFbo1GiIq6DiaRDWVRgcQV019Ex+rC0DG5BhMuCV55oPLneMTlVWz+gT3TxnwCe0NFckixcmNcGjjDJrA1ag8+a6RheG9rF+Pge0M/HMdkMKBji3/ vagrant
 EOF
 chmod 600 /root/.ssh/authorized_keys
 
@@ -101,12 +107,6 @@ docker network ls
 docker network ls | grep br0_rke | awk '{print $1}' | xargs docker network rm
 docker network create --driver=bridge --subnet=10.43.0.0/16 br0_rke
 
-# make key in vagrant host (master-1, rancher host, ~18.155) 
-ssh-keygen -t rsa -C vagrant -P "" -f ~/.ssh/vagrant -q 
-chmod 400 ~/.ssh/vagrant
-ssh-agent
-ssh-add ~/.ssh/vagrant
-
 # put ssh into k8s host (~63.220, ~20-96)
 ssh -i ~/.ssh/vagrant vagrant@dooheehong323
 ssh -i ~/.ssh/vagrant vagrant@dooheehong323 "mkdir -p /home/vagrant/.ssh"
@@ -114,18 +114,17 @@ scp -i ~/.ssh/vagrant vagrant vagrant@dooheehong323:/home/vagrant.ssh/
 scp -i ~/.ssh/vagrant vagrant.pub vagrant@dooheehong323:/home/vagrant.ssh/
 
 ssh -i /root/.ssh/vagrant root@10.0.0.10
-ssh -i /root/.ssh/vagrant root@10.0.2.15
 scp -i vagrant vagrant root@10.0.0.10:/root/.ssh/vagrant
 scp -i vagrant vagrant.pub root@10.0.0.10:/root/.ssh/vagrant.pub 
-
-ssh -i vagrant root@10.0.0.10 "sudo chmod 600 /root/.ssh/vagrant*"
-ssh -i vagrant root@10.0.0.10 "eval `ssh-agent & ssh-add vagrant`"
-ssh -i vagrant root@10.0.0.10 "sudo usermod -aG docker root"
 
 ##########################################
 # in k8s host (~63.220, ~20-96)
 ##########################################
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+sudo chmod 600 /root/.ssh/vagrant*
+eval `ssh-agent & ssh-add vagrant`
+sudo usermod -aG docker root
 
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
