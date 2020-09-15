@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
       node.vm.hostname = "#{host_name}"
       node.ssh.insert_key=false
       #node.vm.network :private_network, ip: host_ip
-      node.vm.network "public_network", ip: "192.168.0.150"
+      node.vm.network "public_network", bridge: "eno1:"
       node.vm.provision "shell", :path => File.join(File.dirname(__FILE__),"scripts/#{host_name}.sh"), :args => node.vm.hostname 
       
       node.vm.provider :virtualbox do |vb|
