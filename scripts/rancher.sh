@@ -15,6 +15,8 @@ sudo apt-get -y install docker-ce
 sudo systemctl start docker
 sudo systemctl enable docker
 
+# yum install docker -y
+
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
   "group": "root"
@@ -22,6 +24,8 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 EOF
 
 sudo service docker restart
+sudo systemctl enable docker
+
 
 sudo su
 
@@ -144,14 +148,22 @@ sudo apt-get install -y kubectl
 
 cd /Volumes/workspace/etc/tz-k8s-vagrant
 
+# in master
 download rke
 https://github.com/rancher/rke/releases
 https://github.com/rancher/rke/releases/tag/v1.1.7
+#yum install wget -y
 wget https://github.com/rancher/rke/releases/download/v1.1.7/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
 
-mv rke_linux-amd64 /usr/bin/rke
-chmod 755 /usr/bin/rke
+
+sudo mv rke_linux-amd64 /usr/bin/rke
+sudo chmod 755 /usr/bin/rke
 rke -v
+
+
+vi ~/.ssh/id_rsa  # /Users/dhong/.ssh/doohee323
+chmod 600 ~/.ssh/id_rsa
 
 rke config
 [+] Cluster Level SSH Private Key Path [~/.ssh/id_rsa]: /root/.ssh/vagrant
