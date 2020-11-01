@@ -40,7 +40,7 @@ docker run -d --restart=unless-stopped \
 
 sleep 120
 echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
-#curl https://192.168.0.100
+#curl https://192.168.0.155
 
 ##################################################################
 # - install rke
@@ -56,7 +56,7 @@ rke -v
 ##################################################################
 # - rke config (with centos account)
 ##################################################################
-sudo chown -Rf centos:centos /home/centos/.ssh
+sudo chown -Rf centos:centos /home/centos
 #su - centos
 mkdir /home/centos/.ssh
 cd /home/centos/.ssh
