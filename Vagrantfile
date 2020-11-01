@@ -13,9 +13,9 @@ Vagrant.configure("2") do |config|
       node.vm.box = "bento/centos-7"
       node.vm.hostname = "#{host_name}"
       node.ssh.insert_key=false
-      #node.vm.network :private_network, ip: host_ip
-      node.vm.network "public_network", bridge: "eno1:"
-      #node.vm.network "forwarded_port", guest: 80, host: 8080
+      node.vm.network :private_network, ip: host_ip
+      #node.vm.network "public_network", bridge: "eno1:"
+      node.vm.network "forwarded_port", guest: 80, host: 80, auto_correct: true
       node.vm.provision "shell", :path => File.join(File.dirname(__FILE__),"scripts/#{host_name}.sh"), :args => node.vm.hostname 
       
       node.vm.provider :virtualbox do |vb|

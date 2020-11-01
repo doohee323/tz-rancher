@@ -13,31 +13,31 @@ kubectl --kubeconfig ~/.kube/config apply -f jenkins_service.yaml
 ## - get jenkins url
 ########################################################################
 # in Workloads
-# => http://192.168.0.126:31891/
+# => http://10.0.0.11:31756/
 
 ########################################################################
 ## - install jenkins plugins
 ########################################################################
-# http://192.168.0.126:32203/pluginManager/available
+# http://10.0.0.11:31756/pluginManager/available
 # install kubernetes
 
 ########################################################################
 ## - make a secret key
 ########################################################################
-https://192.168.0.155/apikeys
+https://10.0.0.10/apikeys
 Add key >
-Access Key (username):  token-bc4hf
-Secret Key (password):: lxwpl7kfmftqjrdqfnq2m4dtth6cz9l7j4dzbxshb6qk669jq82gbh
+Access Key (username):  token-w5q54
+Secret Key (password):: 42plh4bw97grt7xkj96qrjhd5ckqmjfdz66v77x6tt5jrlmwlw6kvg
 
 ########################################################################
 ## - setting kubernetes plugin
 ########################################################################
-# http://192.168.0.126:32203/configureClouds/
+# http://10.0.0.11:31756/configureClouds/
 # kubectl cluster-info
-# Kubernetes Url: https://192.168.0.155
+# Kubernetes Url: https://10.0.0.10
 # Disable https certificate check: check
 # Kubernetes Namespace: default
-# Credentials: token-bc4hf / lxwpl7kfmftqjrdqfnq2m4dtth6cz9l7j4dzbxshb6qk669jq82gbh
+# Credentials: token-w5q54 / 42plh4bw97grt7xkj96qrjhd5ckqmjfdz66v77x6tt5jrlmwlw6kvg
 # kubectl describe services/jenkins | grep IP
 # IP:                       10.43.234.135
 # Jenkins URL: http://10.43.234.135

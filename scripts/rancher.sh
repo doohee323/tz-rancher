@@ -40,7 +40,7 @@ docker run -d --restart=unless-stopped \
 
 sleep 120
 echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
-#curl https://192.168.0.155
+#curl https://10.0.0.10
 
 ##################################################################
 # - install rke

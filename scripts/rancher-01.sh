@@ -2,11 +2,11 @@
 
 set -x
 
-#ssh 192.168.0.126
+#ssh 10.0.0.11
 #Are you sure you want to continue connecting (yes/no)? yes
 
 # check access is ok
-#ssh -i ~/.ssh/id_rsa centos@192.168.0.126
+#ssh -i ~/.ssh/id_rsa centos@10.0.0.11
 
 cd /home/centos
 
@@ -16,7 +16,7 @@ cd /home/centos
 # rke config    ## host -> k8s host
 #[+] Cluster Level SSH Private Key Path [~/.ssh/id_rsa]:
 #[+] Number of Hosts [1]:
-#[+] SSH Address of host (1) [none]: 192.168.0.126
+#[+] SSH Address of host (1) [none]: 10.0.0.11
 #[+] SSH Port of host (1) [22]:
 #[+] SSH Private Key Path of host (45.79.109.174) [none]: /home/centos/.ssh/id_rsa
 #[+] SSH User of host (45.79.109.174) [ubuntu]: centos

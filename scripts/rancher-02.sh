@@ -7,20 +7,20 @@
 ## 1. create a cluster
 ##    Add Cluster > Other Cluster > Cluster Name: jenkins
 ## 2. import cluster
-## https://192.168.0.155/g/clusters/add/launch/import?importProvider=other
+## https://10.0.0.10/g/clusters/add/launch/import?importProvider=other
 ## add "--kubeconfig=kube_config_cluster.yml"
 su - centos
-curl --insecure -sfL https://192.168.0.155/v3/import/2lb9zn7p69gk22jhgwmggfrtrccvt887szzmgh4szfz2rm8hjk98bk.yaml | kubectl apply -f --kubeconfig=kube_config_cluster.yml -
+curl --insecure -sfL https://10.0.0.10/v3/import/662nm5mdlg9k4m75dg8g55w9624427hdkblg464zrnhxcdsvdgm6s2.yaml | kubectl apply -f --kubeconfig=kube_config_cluster.yml -
 
 or
 
-wget https://192.168.0.155/v3/import/2lb9zn7p69gk22jhgwmggfrtrccvt887szzmgh4szfz2rm8hjk98bk.yaml --no-check-certificate
-kubectl apply -f 2lb9zn7p69gk22jhgwmggfrtrccvt887szzmgh4szfz2rm8hjk98bk.yaml --kubeconfig=kube_config_cluster.yml
+wget https://10.0.0.10/v3/import/662nm5mdlg9k4m75dg8g55w9624427hdkblg464zrnhxcdsvdgm6s2.yaml --no-check-certificate
+kubectl apply -f 662nm5mdlg9k4m75dg8g55w9624427hdkblg464zrnhxcdsvdgm6s2.yaml --kubeconfig=kube_config_cluster.yml
 
 ########################################################################
 # - set .kube/config
 ########################################################################
-# from https://192.168.0.155/c/c-65zvt/monitoring  # Global > Dashboard: jenkins
+# from https://10.0.0.10/c/c-65zvt/monitoring  # Global > Dashboard: jenkins
 # download Kubeconfig File
 mkdir -p /home/centos/.kube
 # vi /home/centos/.kube/config
