@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
 
   $config['ip'].each do | host_name, host_ip |
     config.vm.define "#{host_name}" do |node|
-      node.vm.box = "bento/ubuntu-18.04"
+      node.vm.box = "bento/centos-7"
       node.vm.hostname = "#{host_name}"
       node.ssh.insert_key=false
       #node.vm.network :private_network, ip: host_ip
@@ -25,3 +25,4 @@ Vagrant.configure("2") do |config|
   end
 
 end
+

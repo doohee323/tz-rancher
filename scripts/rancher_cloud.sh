@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#https://rancher.com/docs/rancher/v2.x/en/installation/other-installation-methods/single-node-docker/
+# https://rancher.com/docs/rancher/v2.x/en/installation/other-installation-methods/single-node-docker/
 
 ##################################################################
 # rancher server
@@ -10,9 +10,9 @@
 
 ## 1) open ports
 # all ports: https://rancher.com/docs/rancher/v2.x/en/installation/requirements/ports/
-#add rancher1 security group
-#open tcp 22, 80, 443, 2379, 6443, 10250 inbound 
-#open udp 8472 inbound 
+# add rancher1 security group
+# open tcp 22, 80, 443, 2379, 6443, 10250 inbound
+# open udp 8472 inbound
 
 sudo su
 
@@ -48,7 +48,7 @@ docker run -d --restart=unless-stopped \
 
 docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
 
-curl http://54.183.236.40
+#curl http://54.183.236.40
 
 ## 4) install rke
 
@@ -61,6 +61,7 @@ chmod 755 /usr/bin/rke
 rke -v
 
 ## open ports in master
+sudo firewall-cmd --state
 firewall-cmd --permanent --add-port=6443/tcp
 firewall-cmd --permanent --add-port=2379-2380/tcp
 firewall-cmd --permanent --add-port=10250/tcp
@@ -72,6 +73,7 @@ firewall-cmd --add-masquerade --permanent
 # only if you want NodePorts exposed on control plane IP as well
 firewall-cmd --permanent --add-port=30000-32767/tcp
 systemctl restart firewalld
+sudo firewall-cmd --list-all
 
 ## 5) rke config (with centos account)
 sudo chown -Rf centos:centos /home/centos/.ssh

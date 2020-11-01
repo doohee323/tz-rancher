@@ -2,20 +2,12 @@
 
 set -x
 
-##########################################
-# in vagrant host (master-1, rancher host, ~18.155)
-##########################################
-sudo swapoff -a
-sudo sed -i '/swap/d' /etc/fstab
-sudo apt-get update
-sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get -y install docker-ce
-sudo systemctl start docker
-sudo systemctl enable docker
+# https://rancher.com/docs/rancher/v2.x/en/installation/other-installation-methods/single-node-docker/
 
-# yum install docker -y
+##################################################################
+## - install docker
+##################################################################
+yum install docker -y
 
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
@@ -26,214 +18,87 @@ EOF
 sudo service docker restart
 sudo systemctl enable docker
 
+useradd centos
+echo "centos" | passwd --stdin centos
+sudo usermod -aG dockerroot centos
 
+sudo groupadd docker
+sudo usermod -aG docker centos
+
+#add /etc/sudoers
+cat <<EOF | sudo tee /etc/sudoers.d/rancher
+centos ALL=(ALL) NOPASSWD:ALL
+EOF
+
+##################################################################
+## - install rancher
+##################################################################
+docker run -d --restart=unless-stopped \
+  -p 80:80 -p 443:443 \
+  --privileged \
+  rancher/rancher:latest
+
+sleep 120
+echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
+#curl https://192.168.0.100
+
+##################################################################
+# - install rke
+##################################################################
+#sudo service docker restart
+
+yum install wget -y
+wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
+mv rke_linux-amd64 /usr/bin/rke
+chmod 755 /usr/bin/rke
+rke -v
+
+##################################################################
+# - rke config (with centos account)
+##################################################################
+sudo chown -Rf centos:centos /home/centos/.ssh
+#su - centos
+mkdir /home/centos/.ssh
+cd /home/centos/.ssh
+ssh-keygen -t rsa -C centos -P "" -f /home/centos/.ssh/id_rsa -q
+sudo chown centos:centos /home/centos/.ssh/id_rsa
+sudo chmod 600 /home/centos/.ssh/id_rsa
+eval `ssh-agent`
+ssh-add id_rsa
+
+sudo mkdir /vagrant/shared
+sudo cp /home/centos/.ssh/id_rsa.pub /vagrant/shared/id_rsa.pub
+#sudo chmod 700 /home/centos/.ssh
+#sudo chmod 640 /home/centos/.ssh/authorized_keys
+
+########################################################################
+# - install kubectl
+########################################################################
 sudo su
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+yum install -y kubectl
 
-docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker stop 
-sudo rm -Rf /opt/rancher
-docker run -d --restart=unless-stopped \
-  -p 9080:80 -p 9443:443 \
-  -v /opt/rancher:/var/lib/rancher \
-  -e NO_PROXY="localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,192.168.10.0/24,k8s-master" \
-  rancher/rancher:latest
-  
-docker run -d --restart=unless-stopped \
-  -p 9080:80 -p 9443:443 \
-  -e HTTP_PROXY="http://192.168.10.1:3128" \
-  -e HTTPS_PROXY="http://192.168.10.1:3128" \
-  -e NO_PROXY="localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,192.168.10.0/24,example.com" \
-  rancher/rancher:latest
+cd /home/centos
 
-docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
+bash /vagrant/scripts/rancher-01.sh
 
-# https://github.com/rancher/rke/releases/tag/v1.1.7
-
-https://dooheehong323:9443/g/clusters
+echo ########################################################################
+echo Need to run and follow two shells!!!
+echo
+echo bash /vagrant/scripts/rancher-02.sh
+echo bash /vagrant/scripts/rancher-03.sh
+echo ########################################################################
 
 exit 0
 
 
-rke up
-
-
-
----------------
-ssh root@dooheehong323
-su - doohee323
-doohee323@master-1:~$ cd /Volumes/workspace/etc/tz-k8s-vagrant
-doohee323@master-1:/Volumes/workspace/etc/tz-k8s-vagrant$ vagrant reload
-
-##########################################
-# in vagrant host (master-1, rancher host, ~18.155)
-##########################################
-vagrant up
-#vagrant reload
-
-# make key in vagrant host (master-1, rancher host, ~18.155)
-ssh-keygen -t rsa -C vagrant -P "" -f ~/.ssh/vagrant -q
-chmod 400 ~/.ssh/vagrant
-ssh-agent
-ssh-add ~/.ssh/vagrant
-
-##########################################
-# in k8s host (~63.220, ~20-96)
-##########################################
-vagrant ssh k8s-master
-sudo su
-usermod -aG docker vagrant
-usermod -aG docker root
-
-sudo vi /etc/hosts
-192.168.0.140 dooheehong323
-
-mkdir /root/.ssh
-cat <<EOF | sudo tee /root/.ssh/authorized_keys
-ssh-rsa aaa
-EOF
-chmod 600 /root/.ssh/authorized_keys
-
-##########################################
-# in vagrant host (master-1, rancher host, ~18.155)
-##########################################
-# install docker
-sudo usermod -aG docker root
-sudo swapoff -a
-
-cat <<EOF | sudo tee /etc/docker/daemon.json
-{
-    "group": "root"
-}
-EOF
-
-service docker restart
-
-docker network ls
-docker network ls | grep br0_rke | awk '{print $1}' | xargs docker network rm
-docker network create --driver=bridge --subnet=10.43.0.0/16 br0_rke
-
-# put ssh into k8s host (~63.220, ~20-96)
-ssh -i ~/.ssh/vagrant vagrant@dooheehong323
-ssh -i ~/.ssh/vagrant vagrant@dooheehong323 "mkdir -p /home/vagrant/.ssh"
-scp -i ~/.ssh/vagrant vagrant vagrant@dooheehong323:/home/vagrant.ssh/
-scp -i ~/.ssh/vagrant vagrant.pub vagrant@dooheehong323:/home/vagrant.ssh/
-
-ssh -i /root/.ssh/vagrant root@10.0.0.10
-scp -i vagrant vagrant root@10.0.0.10:/root/.ssh/vagrant
-scp -i vagrant vagrant.pub root@10.0.0.10:/root/.ssh/vagrant.pub 
-
-##########################################
-# in k8s host (~63.220, ~20-96)
-##########################################
-https://kubernetes.io/docs/tasks/tools/install-kubectl/
-
-sudo chmod 600 /root/.ssh/vagrant*
-eval `ssh-agent & ssh-add vagrant`
-sudo usermod -aG docker root
-
-cat <<EOF | sudo tee /etc/docker/daemon.json
-{
-    "group": "root"
-}
-EOF
-
-sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt-get install -y kubectl
-
-##########################################
-# in vagrant host (master-1, rancher host, ~18.155)
-##########################################
-
-cd /Volumes/workspace/etc/tz-k8s-vagrant
-
-# in master
-download rke
-https://github.com/rancher/rke/releases
-https://github.com/rancher/rke/releases/tag/v1.1.7
-#yum install wget -y
-wget https://github.com/rancher/rke/releases/download/v1.1.7/rke_linux-amd64
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
-
-
-sudo mv rke_linux-amd64 /usr/bin/rke
-sudo chmod 755 /usr/bin/rke
-rke -v
-
-
-vi ~/.ssh/id_rsa  # /Users/dhong/.ssh/doohee323
-chmod 600 ~/.ssh/id_rsa
-
-rke config
-[+] Cluster Level SSH Private Key Path [~/.ssh/id_rsa]: /root/.ssh/vagrant
-[+] Number of Hosts [1]:          
-[+] SSH Address of host (1) [none]: 10.0.0.10
-[+] SSH Port of host (1) [22]: 
-[+] SSH Private Key Path of host (10.0.0.10) [none]: /root/.ssh/vagrant
-[+] SSH User of host (10.0.0.10) [ubuntu]: root
-[+] Is host (10.0.0.10) a Control Plane host (y/n)? [y]: 
-[+] Is host (10.0.0.10) a Worker host (y/n)? [n]: 
-[+] Is host (10.0.0.10) an etcd host (y/n)? [n]: 
-[+] Override Hostname of host (10.0.0.10) [none]: 
-[+] Internal IP of host (10.0.0.10) [none]: 
-[+] Docker socket path on host (10.0.0.10) [/var/run/docker.sock]: 
-[+] Network Plugin Type (flannel, calico, weave, canal) [canal]: 
-[+] Authentication Strategy [x509]: 
-[+] Authorization Mode (rbac, none) [rbac]: 
-[+] Kubernetes Docker image [rancher/hyperkube:v1.18.8-rancher1]: 
-[+] Cluster domain [cluster.local]: 
-[+] Service Cluster IP Range [10.43.0.0/16]: 
-[+] Enable PodSecurityPolicy [n]: 
-[+] Cluster Network CIDR [10.42.0.0/16]: 
-[+] Cluster DNS Service IP [10.43.0.10]: 
-[+] Add addon manifest URLs or YAML files [no]: 
-
-vi cluster.yml
-  docker_socket: /var/run/docker.sock
-  ssh_key: ""
-  ssh_key_path: /root/.ssh/vagrant
-  ssh_cert: ""
-  ssh_cert_path: ""
-addon_job_timeout: 30
-
-rke up
-
-sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt-get install -y kubectl
-
-kubectl --kubeconfig kube_config_cluster.yml version
-kubectl --kubeconfig kube_config_cluster.yml get nodes
-
-https://dooheehong323:9443/c/c-h7hml/edit?provider=import
-curl --insecure -sfL https://dooheehong323:9443/v3/import/vd5g98ht6pxg7cdq586qgjcxnwl7fkjdvq5f7wz7wb2tgcljsfwsm5.yaml | kubectl delete --kubeconfig=kube_config_cluster.yml -f -
-curl --insecure -sfL https://dooheehong323:9443/v3/import/vd5g98ht6pxg7cdq586qgjcxnwl7fkjdvq5f7wz7wb2tgcljsfwsm5.yaml | kubectl apply --kubeconfig=kube_config_cluster.yml -f -
-
-ln -s /usr/share/zoneinfo/America/Los_Angeles localtime
-
-##########################################
-# in k8s host (~63.220, ~20-96)
-##########################################
-sudo mkdir /home/vagrant/.kube
-sudo cp /vagrant/kube_config_cluster.yml /home/vagrant/.kube/config
-
-
-
-docker rm -fv  $(docker ps -a -q) 
-docker volume rm -f $(docker volume ls)
-sudo reboot -h now
-sudo su
-rm -rf /run/secrets/kubernetes.io
-rm -rf /var/lib/etcd
-rm -rf /var/lib/kubelet
-rm -rf /var/lib/rancher
-rm -rf /etc/kubernetes
-rm -rf /opt/rke
-exit
-docker volume rm -f $(docker volume ls)
-sudo reboot -h now
 
 
