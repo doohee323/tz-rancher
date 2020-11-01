@@ -20,7 +20,7 @@ service docker restart
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
 ########################################################################
-# set .kube/config with doohee323
+# set .kube/config with testuser
 ########################################################################
 mkdir -p $HOME/.kube
 sudo cp -Rf /etc/kubernetes/admin.conf $HOME/.kube/config

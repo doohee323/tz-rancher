@@ -5,8 +5,8 @@
 ##################################################################
 # rancher server
 ##################################################################
-# aws: ssh -i ~/.ssh/dewey_ca1.pem centos@54.67.120.201
-# linode: ssh -i ~/.ssh/doohee323 root@45.79.109.174
+# aws: ssh -i ~/.ssh/testuser.pem centos@54.67.120.201
+# linode: ssh -i ~/.ssh/testuser root@45.79.109.174
 
 ## 1) open ports
 # all ports: https://rancher.com/docs/rancher/v2.x/en/installation/requirements/ports/
@@ -79,9 +79,9 @@ sudo firewall-cmd --list-all
 sudo chown -Rf centos:centos /home/centos/.ssh
 su - centos
 mkdir /home/centos/.ssh
-# copy from mine /Users/dhong/.ssh/doohee323
-# scp -i ~/.ssh/dewey_ca1.pem /Users/dhong/.ssh/doohee323 centos@54.67.120.201:/home/centos/.ssh/id_rsa
-# scp -i ~/.ssh/doohee323 /Users/dhong/.ssh/doohee323 root@45.79.109.174:/home/centos/.ssh/id_rsa
+# copy from mine /Users/testuser/.ssh/testuser
+# scp -i ~/.ssh/testuser.pem /Users/testuser/.ssh/testuser centos@54.67.120.201:/home/centos/.ssh/id_rsa
+# scp -i ~/.ssh/testuser /Users/testuser/.ssh/testuser root@45.79.109.174:/home/centos/.ssh/id_rsa
 ll /home/centos/.ssh/id_rsa
 
 cd /home/centos/.ssh
@@ -90,7 +90,7 @@ sudo chmod 600 id_rsa
 eval `ssh-agent`
 ssh-add id_rsa
 
-# add authorized_keys in k8s host from /Users/dhong/.ssh/doohee323.pub
+# add authorized_keys in k8s host from /Users/testuser/.ssh/testuser.pub
 sudo chmod 700 /home/centos/.ssh
 sudo chmod 640 /home/centos/.ssh/authorized_keys
 
@@ -182,10 +182,10 @@ systemctl restart firewalld
 ##################################################################
 # k8s host
 ##################################################################
-# aws: ssh -i ~/.ssh/dewey_ca1.pem centos@3.101.86.94
-ssh -i ~/.ssh/dewey_ca1.pem centos@54.193.16.121
-# linode: ssh -i ~/.ssh/doohee323 root@96.126.102.140
-ssh -i ~/.ssh/doohee323 root@45.79.78.194
+# aws: ssh -i ~/.ssh/testuser.pem centos@3.101.86.94
+ssh -i ~/.ssh/testuser.pem centos@54.193.16.121
+# linode: ssh -i ~/.ssh/testuser root@96.126.102.140
+ssh -i ~/.ssh/testuser root@45.79.78.194
 sudo su
 yum install docker -y
 
@@ -221,7 +221,7 @@ firewall-cmd --permanent --add-port=9099/tcp
 firewall-cmd --permanent --add-port=10254/tcp
 systemctl restart firewalld
 
-# add authorized_keys from /Users/dhong/.ssh/doohee323.pub
+# add authorized_keys from /Users/testuser/.ssh/testuser.pub
 su - centos
 sudo mkdir /home/centos/.ssh
 sudo chown -Rf centos:centos /home/centos/.ssh
@@ -251,12 +251,12 @@ USER jenkins
 EOF
 
 cd /home/centos/jenkins-master
-docker build -t doohee323/jenkins-master ./
-export DOCKER_ID=doohee323
+docker build -t testuser/jenkins-master ./
+export DOCKER_ID=testuser
 export DOCKER_PASSWD=
 docker login -u="$DOCKER_ID" -p="$DOCKER_PASSWD"
 docker images
-docker push doohee323/jenkins-master
+docker push testuser/jenkins-master
 
 # make a test image and push to dockerhub
 mkdir /home/centos/jenkins-slave
@@ -266,8 +266,8 @@ ENTRYPOINT ["jenkins-slave"]
 EOF
 
 cd /home/centos/jenkins-slave
-docker build -t doohee323/jenkins-slave ./
-docker push doohee323/jenkins-slave
+docker build -t testuser/jenkins-slave ./
+docker push testuser/jenkins-slave
 
 ## 2) import in workloads
 # import YAML
@@ -290,7 +290,7 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: doohee323/jenkins-master
+        image: testuser/jenkins-master
         env:
           - name: JAVA_OPTS
             value: -Djenkins.install.runSetupWizard=false
@@ -358,7 +358,7 @@ Jenkins URL: http://10.43.156.129
 
 Pod Templates: jenkins
     Containers: slave1
-    Docker image: doohee323/jenkins-slave
+    Docker image: testuser/jenkins-slave
 
 ## 7) make a job
 job name: slave1

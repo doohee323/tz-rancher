@@ -44,7 +44,7 @@ Secret Key (password):: 42plh4bw97grt7xkj96qrjhd5ckqmjfdz66v77x6tt5jrlmwlw6kvg
 
 # Pod Templates: slave1
 #     Containers: slave1
-#     Docker image: doohee323/jenkins-slave
+#     Docker image: testuser/jenkins-slave
 
 ########################################################################
 ## - make a job

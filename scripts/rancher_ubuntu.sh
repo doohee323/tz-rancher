@@ -124,9 +124,9 @@ rke up
 
 ---------------
 ssh root@dooheehong323
-su - doohee323
-doohee323@master-1:~$ cd /Volumes/workspace/etc/tz-k8s-vagrant
-doohee323@master-1:/Volumes/workspace/etc/tz-k8s-vagrant$ vagrant reload
+su - testuser
+testuser@master-1:~$ cd /Volumes/workspace/etc/tz-k8s-vagrant
+testuser@master-1:/Volumes/workspace/etc/tz-k8s-vagrant$ vagrant reload
 
 ##########################################
 # in vagrant host (master-1, rancher host, ~18.155)
@@ -227,7 +227,7 @@ sudo chmod 755 /usr/bin/rke
 rke -v
 
 
-vi ~/.ssh/id_rsa  # /Users/dhong/.ssh/doohee323
+vi ~/.ssh/id_rsa  # /Users/testuser/.ssh/testuser
 chmod 600 ~/.ssh/id_rsa
 
 rke config
