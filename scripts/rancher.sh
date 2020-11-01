@@ -67,7 +67,7 @@ eval `ssh-agent`
 ssh-add id_rsa
 
 sudo mkdir /vagrant/shared
-sudo cp /home/centos/.ssh/id_rsa.pub /vagrant/shared/id_rsa.pub
+sudo cp /home/centos/.ssh/id_rsa.pub /vagrant/shared/authorized_keys
 #sudo chmod 700 /home/centos/.ssh
 #sudo chmod 640 /home/centos/.ssh/authorized_keys
 

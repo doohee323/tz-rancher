@@ -29,7 +29,7 @@ EOF
 sudo mkdir /home/centos/.ssh
 sudo chown -Rf centos:centos /home/centos/.ssh
 sudo chmod 700 /home/centos/.ssh
-sudo cp /vagrant/shared/id_rsa.pub /home/centos/.ssh/authorized_keys
+sudo cp /vagrant/shared/authorized_keys /home/centos/.ssh/authorized_keys
 sudo chmod 640 /home/centos/.ssh/authorized_keys
 
 sudo chown -Rf centos:centos /var/run/docker.sock
