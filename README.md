@@ -1,4 +1,4 @@
-# tz-rancher
+# Jenkins on Kubernetes with Rancher
 
 ## build a jenkins env on CentOS in vagrant
 ```
