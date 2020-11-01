@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ########################################################################
-## - import a cluster
+# - import a cluster
 ########################################################################
 ## from Import Cluster page
 ## 1. create a cluster
