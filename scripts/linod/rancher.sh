@@ -251,12 +251,12 @@ USER jenkins
 EOF
 
 cd /home/centos/jenkins-master
-docker build -t testuser/jenkins-master ./
+docker build -t doohee323/jenkins-master ./
 export DOCKER_ID=testuser
 export DOCKER_PASSWD=
 docker login -u="$DOCKER_ID" -p="$DOCKER_PASSWD"
 docker images
-docker push testuser/jenkins-master
+docker push doohee323/jenkins-master
 
 # make a test image and push to dockerhub
 mkdir /home/centos/jenkins-slave
@@ -266,8 +266,8 @@ ENTRYPOINT ["jenkins-slave"]
 EOF
 
 cd /home/centos/jenkins-slave
-docker build -t testuser/jenkins-slave ./
-docker push testuser/jenkins-slave
+docker build -t doohee323/jenkins-slave ./
+docker push doohee323/jenkins-slave
 
 ## 2) import in workloads
 # import YAML
@@ -290,7 +290,7 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: testuser/jenkins-master
+        image: doohee323/jenkins-master
         env:
           - name: JAVA_OPTS
             value: -Djenkins.install.runSetupWizard=false
@@ -358,7 +358,7 @@ Jenkins URL: http://10.43.156.129
 
 Pod Templates: jenkins
     Containers: slave1
-    Docker image: testuser/jenkins-slave
+    Docker image: doohee323/jenkins-slave
 
 ## 7) make a job
 job name: slave1
