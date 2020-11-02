@@ -62,8 +62,8 @@ echo "##################################################################"
 #sudo service docker restart
 
 wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
-mv rke_linux-amd64 /usr/bin/rke
-chmod 755 /usr/bin/rke
+sudo mv rke_linux-amd64 /usr/bin/rke
+sudo chmod 755 /usr/bin/rke
 rke -v
 
 ##################################################################
