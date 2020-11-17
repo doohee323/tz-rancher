@@ -37,12 +37,13 @@ cd /home/centos
 #[+] Cluster DNS Service IP [10.43.0.10]:
 #[+] Add addon manifest URLs or YAML files [no]:
 
-sudo cp /vagrant/shared/cluster.yml /home/centos
+sudo cp /vagrant/shared/cluster.yml /home/centos/cluster.yml
 ls cluster.yml
 
 ########################################################################
 # - rke up (with centos account)
 ########################################################################
+sudo chown -Rf centos:centos /home/centos
 sudo chown -Rf centos:centos /var/run/docker.sock
 docker ps
 rm -Rf /home/centos/cluster.rkestate

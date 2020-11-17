@@ -9,11 +9,9 @@
 ## 2. import cluster
 ## https://10.0.0.10/g/clusters/add/launch/import?importProvider=other
 ## add "--kubeconfig=kube_config_cluster.yml"
-su - ubuntu
+sudo su - ubuntu
 curl --insecure -sfL https://10.0.0.10/v3/import/x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml | kubectl apply -f --kubeconfig=kube_config_cluster.yml -
-
 or
-
 wget https://10.0.0.10/v3/import/x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml --no-check-certificate
 kubectl apply -f x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml --kubeconfig=kube_config_cluster.yml
 
@@ -28,10 +26,5 @@ sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
 
 echo "" >> /home/ubuntu/.bash_profile
 echo "alias ll='ls -al'" >> /home/ubuntu/.bash_profile
-echo "alias kk='kubectl --kubeconfig ~/.kube/config'" >> /home/ubuntu/.bash_profile
+echo "alias k='kubectl --kubeconfig ~/.kube/config'" >> /home/ubuntu/.bash_profile
 source /home/ubuntu/.bash_profile
-
-
-
-
-

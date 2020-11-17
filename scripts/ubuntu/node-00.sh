@@ -25,9 +25,10 @@ EOF
 sudo service docker restart
 sudo systemctl enable docker
 
+sudo groupadd ubuntu
 sudo useradd -m ubuntu -g ubuntu -s /bin/bash
 echo -e "ubuntu\nubuntu" | passwd ubuntu
-sudo mkdir /home/ubuntu
+sudo mkdir -p /home/ubuntu
 sudo chown ubuntu:ubuntu /home/ubuntu
 sudo groupadd docker
 sudo usermod -aG docker ubuntu
@@ -35,13 +36,14 @@ sudo usermod -aG docker ubuntu
 #add /etc/sudoers
 cat <<EOF | sudo tee /etc/sudoers.d/rancher
 ubuntu ALL=(ALL) NOPASSWD:ALL
+vagrant ALL=(ALL) NOPASSWD:ALL
 EOF
 
-sudo mkdir /home/ubuntu/.ssh
+sudo mkdir -p /home/ubuntu/.ssh
 sudo chown -Rf ubuntu:ubuntu /home/ubuntu
-sudo chmod 700 /home/ubuntu/.ssh
+sudo chmod -Rf 700 /home/ubuntu/.ssh
 sudo cp /vagrant/shared/authorized_keys /home/ubuntu/.ssh/authorized_keys
-sudo chmod 640 /home/ubuntu/.ssh/authorized_keys
+sudo chmod -Rf 640 /home/ubuntu/.ssh/authorized_keys
 sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps
 

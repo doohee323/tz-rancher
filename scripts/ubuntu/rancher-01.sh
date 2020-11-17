@@ -37,16 +37,17 @@ cd /home/ubuntu
 #[+] Cluster DNS Service IP [10.43.0.10]:
 #[+] Add addon manifest URLs or YAML files [no]:
 
-sudo cp /vagrant/shared/cluster.yml /home/ubuntu
+sudo cp /vagrant/shared/cluster_ubuntu.yml /home/ubuntu/cluster.yml
 ls cluster.yml
 
 ########################################################################
 # - rke up (with ubuntu account)
 ########################################################################
+sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps
-rm -Rf /home/ubuntu/cluster.rkestate
-rm -Rf /home/ubuntu/kube_config_cluster.yml
+sudo rm -Rf /home/ubuntu/cluster.rkestate
+sudo rm -Rf /home/ubuntu/kube_config_cluster.yml
 rke up
 
 ls /home/ubuntu/kube_config_cluster.yml

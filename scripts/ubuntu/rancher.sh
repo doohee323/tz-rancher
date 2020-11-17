@@ -49,16 +49,16 @@ docker run -d --restart=unless-stopped \
   -e NO_PROXY="localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,192.168.10.0/24,k8s-master" \
   rancher/rancher:latest
 
-useradd centos
-echo "centos" | passwd --stdin centos
-sudo usermod -aG dockerroot centos
+useradd ubuntu
+echo "ubuntu" | passwd --stdin ubuntu
+sudo usermod -aG dockerroot ubuntu
 
 sudo groupadd docker
-sudo usermod -aG docker centos
+sudo usermod -aG docker ubuntu
 
 #add /etc/sudoers
 cat <<EOF | sudo tee /etc/sudoers.d/rancher
-centos ALL=(ALL) NOPASSWD:ALL
+ubuntu ALL=(ALL) NOPASSWD:ALL
 EOF
 
 ## 3) install rancher

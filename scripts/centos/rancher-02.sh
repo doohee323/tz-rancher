@@ -28,7 +28,7 @@ sudo chown centos:centos /home/centos/.kube/config
 
 echo "" >> /home/centos/.bash_profile
 echo "alias ll='ls -al'" >> /home/centos/.bash_profile
-echo "alias kk='kubectl --kubeconfig ~/.kube/config'" >> /home/centos/.bash_profile
+echo "alias k='kubectl --kubeconfig ~/.kube/config'" >> /home/centos/.bash_profile
 source /home/centos/.bash_profile
 
 
