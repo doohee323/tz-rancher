@@ -40,10 +40,10 @@ vagrant ALL=(ALL) NOPASSWD:ALL
 EOF
 
 sudo mkdir -p /home/ubuntu/.ssh
-sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 sudo chmod -Rf 700 /home/ubuntu/.ssh
 sudo cp /vagrant/shared/authorized_keys /home/ubuntu/.ssh/authorized_keys
 sudo chmod -Rf 640 /home/ubuntu/.ssh/authorized_keys
+sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps
 

@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+# - rke up (with ubuntu account)
+sudo su - ubuntu
+rke up
+
+########################################################################
+# - set .kube/config for node status
+########################################################################
+sudo mkdir -p /home/ubuntu/.kube
+sudo cp -Rf /home/ubuntu/kube_config_cluster.yml /home/ubuntu/.kube/config
+sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
+
+echo "" >> /home/ubuntu/.bash_profile
+echo "alias ll='ls -al'" >> /home/ubuntu/.bash_profile
+echo "alias k='kubectl --kubeconfig ~/.kube/config'" >> /home/ubuntu/.bash_profile
+source /home/ubuntu/.bash_profile
+
+k get nodes
+
 ########################################################################
 # - import a cluster
 ########################################################################
@@ -20,11 +38,6 @@ kubectl apply -f x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml --k
 ########################################################################
 # from https://10.0.0.10/c/c-65zvt/monitoring  # Global > Dashboard: jenkins
 # download Kubeconfig File
-mkdir -p /home/ubuntu/.kube
 # vi /home/ubuntu/.kube/config
-sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
 
-echo "" >> /home/ubuntu/.bash_profile
-echo "alias ll='ls -al'" >> /home/ubuntu/.bash_profile
-echo "alias k='kubectl --kubeconfig ~/.kube/config'" >> /home/ubuntu/.bash_profile
-source /home/ubuntu/.bash_profile
+k get nodes

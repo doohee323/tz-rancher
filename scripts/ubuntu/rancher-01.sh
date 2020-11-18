@@ -48,9 +48,9 @@ sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps
 sudo rm -Rf /home/ubuntu/cluster.rkestate
 sudo rm -Rf /home/ubuntu/kube_config_cluster.yml
-rke up
-
-ls /home/ubuntu/kube_config_cluster.yml
+#sudo su - ubuntu
+#rke up
+#ls /home/ubuntu/kube_config_cluster.yml
 
 exit 0
 
