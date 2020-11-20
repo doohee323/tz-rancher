@@ -18,14 +18,14 @@ cd /home/ubuntu
 #[+] Number of Hosts [1]:
 #[+] SSH Address of host (1) [none]: 10.0.0.11
 #[+] SSH Port of host (1) [22]:
-#[+] SSH Private Key Path of host (45.79.109.174) [none]: /home/ubuntu/.ssh/id_rsa
-#[+] SSH User of host (45.79.109.174) [ubuntu]: ubuntu
-#[+] Is host (45.79.109.174) a Control Plane host (y/n)? [y]:
-#[+] Is host (45.79.109.174) a Worker host (y/n)? [n]: y
-#[+] Is host (45.79.109.174) an etcd host (y/n)? [n]: y
-#[+] Override Hostname of host (45.79.109.174) [none]:
-#[+] Internal IP of host (45.79.109.174) [none]:
-#[+] Docker socket path on host (45.79.109.174) [/var/run/docker.sock]:
+#[+] SSH Private Key Path of host (10.0.0.11) [none]: /home/ubuntu/.ssh/id_rsa
+#[+] SSH User of host (10.0.0.11) [ubuntu]: ubuntu
+#[+] Is host (10.0.0.11) a Control Plane host (y/n)? [y]:
+#[+] Is host (10.0.0.11) a Worker host (y/n)? [n]: y
+#[+] Is host (10.0.0.11) an etcd host (y/n)? [n]: y
+#[+] Override Hostname of host (10.0.0.11) [none]:
+#[+] Internal IP of host (10.0.0.11) [none]:
+#[+] Docker socket path on host (10.0.0.11) [/var/run/docker.sock]:
 #[+] Network Plugin Type (flannel, calico, weave, canal) [canal]:
 #[+] Authentication Strategy [x509]:
 #[+] Authorization Mode (rbac, none) [rbac]:
