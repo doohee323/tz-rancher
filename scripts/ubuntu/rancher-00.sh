@@ -29,6 +29,7 @@ EOF
 sudo service docker restart
 sudo systemctl enable docker
 
+sudo groupadd ubuntu
 sudo useradd -m ubuntu -g ubuntu -s /bin/bash
 echo -e "ubuntu\nubuntu" | passwd ubuntu
 sudo mkdir /home/ubuntu

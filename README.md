@@ -5,6 +5,8 @@
 vagrant up
 vagrant destroy -f
 
+url: http://10.0.0.10
+
 Need to run and follow two shells on rancher
 vagrant ssh rancher
 vi /vagrant/scripts/centos/rancher-02.sh
