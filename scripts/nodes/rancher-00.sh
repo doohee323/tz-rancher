@@ -55,13 +55,15 @@ exit 0
 #################################################################
 # - install rancher
 ##################################################################
+docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker stop -f
+docker rmi rancher/rancher -f
 docker run -d --restart=unless-stopped \
   -p 80:80 -p 443:443 \
   --privileged \
   rancher/rancher:latest
 
 sleep 120
-echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
+echo "docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f"
 
 echo "##################################################################"
 echo " Rancher URL: https://10.0.0.10
@@ -72,7 +74,7 @@ echo "##################################################################"
 ##################################################################
 #sudo service docker restart
 
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.4/rke_linux-amd64
 sudo mv rke_linux-amd64 /usr/bin/rke
 sudo chmod 755 /usr/bin/rke
 rke -v
@@ -85,8 +87,8 @@ su - ubuntu
 sudo mkdir /home/ubuntu/.ssh
 cd /home/ubuntu/.ssh
 ssh-keygen -t rsa -C ubuntu -P "" -f /home/ubuntu/.ssh/id_rsa -q
-sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
-sudo chmod 600 /home/ubuntu/.ssh/id_rsa
+sudo chown -Rf ubuntu:ubuntu /home/ubuntu
+sudo chmod 600 /home/ubuntu/.ssh/id_rsa*
 eval `ssh-agent`
 ssh-add id_rsa
 

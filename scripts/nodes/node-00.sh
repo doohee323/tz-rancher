@@ -36,7 +36,7 @@ sudo groupadd ubuntu
 sudo useradd -m ubuntu -g ubuntu -s /bin/bash
 echo -e "ubuntu\nubuntu" | passwd ubuntu
 sudo mkdir /home/ubuntu
-sudo chown ubuntu:ubuntu /home/ubuntu
+sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 sudo groupadd docker
 sudo usermod -aG docker ubuntu
 
