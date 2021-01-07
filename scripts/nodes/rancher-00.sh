@@ -2,20 +2,21 @@
 
 set -x
 
-
 # https://rancher.com/docs/rancher/v2.x/en/installation/other-installation-methods/single-node-docker/
 
-##################################################################
-# - install docker
-##################################################################
 sudo su
 
 # config DNS
+sudo service systemd-resolved stop
+sudo systemctl disable systemd-resolved
 cat <<EOF > /etc/resolv.conf
 nameserver 1.1.1.1 #cloudflare DNS
 nameserver 8.8.8.8 #Google DNS
 EOF
 
+##################################################################
+# - install docker
+##################################################################
 sudo swapoff -a
 sudo sed -i '/swap/d' /etc/fstab
 sudo apt-get update
@@ -28,7 +29,7 @@ sudo systemctl enable docker
 
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "group": "root"
+  "group": "ubuntu"
 }
 EOF
 
@@ -48,7 +49,10 @@ cat <<EOF | sudo tee /etc/sudoers.d/rancher
 ubuntu ALL=(ALL) NOPASSWD:ALL
 EOF
 
-##################################################################
+exit 0
+
+
+#################################################################
 # - install rancher
 ##################################################################
 docker run -d --restart=unless-stopped \
@@ -57,10 +61,10 @@ docker run -d --restart=unless-stopped \
   rancher/rancher:latest
 
 sleep 120
-echo "docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f"
+echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
 
 echo "##################################################################"
-echo " Rancher URL: https://10.0.0.10"
+echo " Rancher URL: https://10.0.0.10
 echo "##################################################################"
 
 ##################################################################
@@ -68,7 +72,7 @@ echo "##################################################################"
 ##################################################################
 #sudo service docker restart
 
-wget https://github.com/rancher/rke/releases/download/v1.2.4/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
 sudo mv rke_linux-amd64 /usr/bin/rke
 sudo chmod 755 /usr/bin/rke
 rke -v
@@ -78,13 +82,13 @@ rke -v
 ##################################################################
 sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 su - ubuntu
-mkdir /home/ubuntu/.ssh
+sudo mkdir /home/ubuntu/.ssh
 cd /home/ubuntu/.ssh
 ssh-keygen -t rsa -C ubuntu -P "" -f /home/ubuntu/.ssh/id_rsa -q
 sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
 sudo chmod 600 /home/ubuntu/.ssh/id_rsa
 eval `ssh-agent`
-ssh-add /home/ubuntu/.ssh/id_rsa
+ssh-add id_rsa
 
 sudo mkdir /vagrant/shared
 sudo cp /home/ubuntu/.ssh/id_rsa.pub /vagrant/shared/authorized_keys

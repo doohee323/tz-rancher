@@ -5,8 +5,9 @@ set -x
 ##################################################################
 # k8s node
 ##################################################################
-
 # config DNS
+sudo service systemd-resolved stop
+sudo systemctl disable systemd-resolved
 cat <<EOF > /etc/resolv.conf
 nameserver 1.1.1.1 #cloudflare DNS
 nameserver 8.8.8.8 #Google DNS
@@ -44,11 +45,9 @@ cat <<EOF | sudo tee /etc/sudoers.d/rancher
 ubuntu ALL=(ALL) NOPASSWD:ALL
 EOF
 
-sudo mkdir /home/ubuntu/.ssh
+sudo mkdir -p /home/ubuntu/.ssh
 sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 sudo chmod 700 /home/ubuntu/.ssh
-sudo cp /vagrant/shared/authorized_keys /home/ubuntu/.ssh/authorized_keys
-sudo chmod 640 /home/ubuntu/.ssh/authorized_keys
 sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps
 
