@@ -47,6 +47,7 @@ sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps
 rm -Rf /home/ubuntu/cluster.rkestate
 rm -Rf /home/ubuntu/kube_config_cluster.yml
+#rke remove -dind --force
 rke up --ignore-docker-version
 
 ls /home/ubuntu/kube_config_cluster.yml

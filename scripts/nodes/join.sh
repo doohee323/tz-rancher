@@ -49,6 +49,7 @@ vi cluster.yml
 # bootstrap k8s servers
 rm -Rf cluster.rkestate
 rm -Rf kube_config_cluster.yml
+#rke remove -dind --force
 rke up --ignore-docker-version
 
 
