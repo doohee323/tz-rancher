@@ -1,6 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# default_network_interface=`ip addr show | awk '/inet.*brd/{print $NF}'`.split(/\n+/)
+default_network_interface=`ifconfig | awk '/UP/ && !/LOOPBACK/ && !/POINTOPOINT/ && !/docker/' | awk '{print substr($1, 1, length($1)-1)}'`.split(/\n+/)
+
 require_relative './bootstrap'
 
 Vagrant.configure("2") do |config|
@@ -13,8 +16,8 @@ Vagrant.configure("2") do |config|
       node.vm.box = "bento/ubuntu-18.04"
       node.vm.hostname = "#{host_name}"
       node.ssh.insert_key=false
-      node.vm.network :private_network, ip: host_ip
-      #node.vm.network "public_network", bridge: "eno1:"
+      #node.vm.network :private_network, ip: host_ip
+      node.vm.network "public_network", bridge: default_network_interface
       node.vm.network "forwarded_port", guest: 80, host: 80, auto_correct: true
       node.vm.provision "shell", :path => File.join(File.dirname(__FILE__),"scripts/#{host_name}.sh"), :args => node.vm.hostname 
       

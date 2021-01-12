@@ -22,7 +22,7 @@ sudo systemctl enable docker
 
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "group": "root"
+  "group": "ubuntu"
 }
 EOF
 
@@ -42,6 +42,24 @@ cat <<EOF | sudo tee /etc/sudoers.d/rancher
 ubuntu ALL=(ALL) NOPASSWD:ALL
 EOF
 
+# config DNS
+sudo service systemd-resolved stop
+sudo systemctl disable systemd-resolved
+sudo rm -Rf /etc/resolv.conf
+cat <<EOF > /etc/resolv.conf
+nameserver 1.1.1.1 #cloudflare DNS
+nameserver 8.8.8.8 #Google DNS
+EOF
+
+########################################################################
+# - install kubectl
+########################################################################
+sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
+
 ##################################################################
 # - install rancher
 ##################################################################
@@ -54,8 +72,11 @@ sleep 120
 echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
 
 echo "##################################################################"
-echo " Rancher URL: https://10.0.0.10
+echo " Rancher URL: https://10.0.0.10"
 echo "##################################################################"
+
+exit 0
+
 
 ##################################################################
 # - install rke
@@ -84,15 +105,6 @@ sudo mkdir /vagrant/shared
 sudo cp /home/ubuntu/.ssh/id_rsa.pub /vagrant/shared/authorized_keys
 #sudo chmod 700 /home/ubuntu/.ssh
 #sudo chmod 640 /home/ubuntu/.ssh/authorized_keys
-
-########################################################################
-# - install kubectl
-########################################################################
-sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt-get install -y kubectl
 
 cd /home/ubuntu
 
