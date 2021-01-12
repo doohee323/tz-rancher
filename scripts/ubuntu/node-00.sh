@@ -15,7 +15,7 @@ sudo systemctl enable docker
 
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "group": "ubuntu"
+  "group": "root"
 }
 EOF
 
@@ -32,6 +32,15 @@ sudo usermod -aG docker ubuntu
 #add /etc/sudoers
 cat <<EOF | sudo tee /etc/sudoers.d/rancher
 ubuntu ALL=(ALL) NOPASSWD:ALL
+EOF
+
+# config DNS
+sudo service systemd-resolved stop
+sudo systemctl disable systemd-resolved
+sudo rm -Rf /etc/resolv.conf
+cat <<EOF > /etc/resolv.conf
+nameserver 1.1.1.1 #cloudflare DNS
+nameserver 8.8.8.8 #Google DNS
 EOF
 
 sudo mkdir /home/ubuntu/.ssh
