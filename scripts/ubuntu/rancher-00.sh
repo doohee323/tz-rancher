@@ -13,10 +13,7 @@ sudo su
 sudo swapoff -a
 sudo sed -i '/swap/d' /etc/fstab
 sudo apt-get update
-sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get -y install docker-ce
+sudo apt-get install -y docker.io apt-transport-https curl
 sudo systemctl start docker
 sudo systemctl enable docker
 
@@ -77,42 +74,3 @@ echo "##################################################################"
 
 exit 0
 
-
-##################################################################
-# - install rke
-##################################################################
-#sudo service docker restart
-
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
-sudo mv rke_linux-amd64 /usr/bin/rke
-sudo chmod 755 /usr/bin/rke
-rke -v
-
-##################################################################
-# - rke config (with ubuntu account)
-##################################################################
-sudo chown -Rf ubuntu:ubuntu /home/ubuntu
-su - ubuntu
-mkdir /home/ubuntu/.ssh
-cd /home/ubuntu/.ssh
-ssh-keygen -t rsa -C ubuntu -P "" -f /home/ubuntu/.ssh/id_rsa -q
-sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
-sudo chmod 600 /home/ubuntu/.ssh/id_rsa
-eval `ssh-agent`
-ssh-add id_rsa
-
-sudo mkdir /vagrant/shared
-sudo cp /home/ubuntu/.ssh/id_rsa.pub /vagrant/shared/authorized_keys
-#sudo chmod 700 /home/ubuntu/.ssh
-#sudo chmod 640 /home/ubuntu/.ssh/authorized_keys
-
-cd /home/ubuntu
-
-bash /vagrant/scripts/ubuntu/rancher-01.sh
-
-echo ########################################################################
-echo Need to run and follow two shells!!!
-echo
-echo bash /vagrant/scripts/ubuntu/rancher-02.sh
-echo bash /vagrant/scripts/ubuntu/rancher-03.sh
-echo ########################################################################

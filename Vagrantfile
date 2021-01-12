@@ -18,8 +18,7 @@ Vagrant.configure("2") do |config|
       node.ssh.insert_key=false
       #node.vm.network :private_network, ip: host_ip
       node.vm.network "public_network", bridge: default_network_interface
-      node.vm.network "forwarded_port", guest: 80, host: 80, auto_correct: true
-      node.vm.provision "shell", :path => File.join(File.dirname(__FILE__),"scripts/#{host_name}.sh"), :args => node.vm.hostname 
+      node.vm.provision "shell", :path => File.join(File.dirname(__FILE__),"scripts/#{host_name}.sh"), :args => node.vm.hostname
       
       node.vm.provider :virtualbox do |vb|
          vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
