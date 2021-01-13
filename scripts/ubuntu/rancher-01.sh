@@ -2,30 +2,28 @@
 
 set -x
 
-#ssh 10.0.0.11
+########################################################################
+# - make a cluster.yml on master server
+########################################################################
+#ssh 192.168.0.126
 #Are you sure you want to continue connecting (yes/no)? yes
-
 # check access is ok
-#ssh -i ~/.ssh/id_rsa ubuntu@10.0.0.11
-
+#ssh -i ~/.ssh/id_rsa ubuntu@192.168.0.103
 cd /home/ubuntu
 
-########################################################################
-# - Add k8s host into rancher
-########################################################################
 # rke config    ## host -> k8s host
 #[+] Cluster Level SSH Private Key Path [~/.ssh/id_rsa]:
 #[+] Number of Hosts [1]:
-#[+] SSH Address of host (1) [none]: 10.0.0.11
+#[+] SSH Address of host (1) [none]: 192.168.0.126
 #[+] SSH Port of host (1) [22]:
-#[+] SSH Private Key Path of host (10.0.0.11) [none]: /home/ubuntu/.ssh/id_rsa
-#[+] SSH User of host (10.0.0.11) [ubuntu]: ubuntu
-#[+] Is host (10.0.0.11) a Control Plane host (y/n)? [y]:
-#[+] Is host (10.0.0.11) a Worker host (y/n)? [n]: y
-#[+] Is host (10.0.0.11) an etcd host (y/n)? [n]: y
-#[+] Override Hostname of host (10.0.0.11) [none]:
-#[+] Internal IP of host (10.0.0.11) [none]:
-#[+] Docker socket path on host (10.0.0.11) [/var/run/docker.sock]:
+#[+] SSH Private Key Path of host (192.168.0.126) [none]: /home/ubuntu/.ssh/id_rsa
+#[+] SSH User of host (192.168.0.126) [ubuntu]: ubuntu
+#[+] Is host (192.168.0.126) a Control Plane host (y/n)? [y]:
+#[+] Is host (192.168.0.126) a Worker host (y/n)? [n]: y
+#[+] Is host (192.168.0.126) an etcd host (y/n)? [n]: y
+#[+] Override Hostname of host (192.168.0.126) [none]:
+#[+] Internal IP of host (192.168.0.126) [none]:
+#[+] Docker socket path on host (192.168.0.126) [/var/run/docker.sock]:
 #[+] Network Plugin Type (flannel, calico, weave, canal) [canal]:
 #[+] Authentication Strategy [x509]:
 #[+] Authorization Mode (rbac, none) [rbac]:
@@ -37,11 +35,12 @@ cd /home/ubuntu
 #[+] Cluster DNS Service IP [10.43.0.10]:
 #[+] Add addon manifest URLs or YAML files [no]:
 
-sudo cp /vagrant/shared/cluster.yml /home/ubuntu
-ls cluster.yml
+#sudo cp /vagrant/shared/cluster.yml /home/ubuntu
+#ls cluster.yml
 
 ########################################################################
-# - rke up (with ubuntu account)
+# - Add k8s host into a node
+# rke up (with ubuntu account)
 ########################################################################
 sudo chown -Rf ubuntu:ubuntu /var/run/docker.sock
 docker ps

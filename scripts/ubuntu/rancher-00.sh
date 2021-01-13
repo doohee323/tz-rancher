@@ -8,7 +8,6 @@ set -x
 ##################################################################
 # - install docker
 ##################################################################
-sudo su
 
 sudo swapoff -a
 sudo sed -i '/swap/d' /etc/fstab
@@ -85,12 +84,25 @@ rke -v
 ##################################################################
 # - rke config (with ubuntu account)
 ##################################################################
+sudo mkdir -p /home/ubuntu/.ssh
 sudo chown -Rf ubuntu:ubuntu /home/ubuntu
 su - ubuntu
-mkdir /home/ubuntu/.ssh
 cd /home/ubuntu/.ssh
 ssh-keygen -t rsa -C ubuntu -P "" -f /home/ubuntu/.ssh/id_rsa -q
-sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
+
+sudo cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+
+cat <<EOF > /home/ubuntu/.ssh/config
+Host 192.168.*
+  StrictHostKeyChecking   no
+  LogLevel                ERROR
+  UserKnownHostsFile      /dev/null
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa
+EOF
+
+sudo chown -Rf ubuntu:ubuntu /home/ubuntu
+sudo chmod 640 /home/ubuntu/.ssh/authorized_keys
 sudo chmod 600 /home/ubuntu/.ssh/id_rsa
 eval `ssh-agent`
 ssh-add id_rsa
@@ -102,11 +114,10 @@ sudo cp /home/ubuntu/.ssh/id_rsa.pub /vagrant/shared/authorized_keys
 
 cd /home/ubuntu
 
-bash /vagrant/scripts/ubuntu/rancher-01.sh
-
 echo ########################################################################
 echo Need to run and follow two shells!!!
 echo
+bash /vagrant/scripts/ubuntu/rancher-01.sh
 echo bash /vagrant/scripts/ubuntu/rancher-02.sh
 echo bash /vagrant/scripts/ubuntu/rancher-03.sh
 echo ########################################################################
