@@ -10,12 +10,12 @@
 ## https://10.0.0.10/g/clusters/add/launch/import?importProvider=other
 ## add "--kubeconfig=kube_config_cluster.yml"
 su - ubuntu
-curl --insecure -sfL https://10.0.0.10/v3/import/x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml | kubectl apply -f --kubeconfig=kube_config_cluster.yml -
-
+curl --insecure -sfL https://192.168.0.180/v3/import/7ms892bw5pvjs9drjv4nddvfbkg27hgpfwt7x58pcn8t5cp5bxwb7k.yaml | kubectl apply -f -
 or
 
-wget https://10.0.0.10/v3/import/x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml --no-check-certificate
-kubectl apply -f x2gwc99hr8gmkgvfpgdplnmspgvtzj9zr5tg26rxlnbsbbqp8bswcz.yaml --kubeconfig=kube_config_cluster.yml
+wget https://192.168.0.180/v3/import/7ms892bw5pvjs9drjv4nddvfbkg27hgpfwt7x58pcn8t5cp5bxwb7k.yaml --no-check-certificate
+kubectl apply -f 7ms892bw5pvjs9drjv4nddvfbkg27hgpfwt7x58pcn8t5cp5bxwb7k.yaml
+
 
 ########################################################################
 # - set .kube/config
