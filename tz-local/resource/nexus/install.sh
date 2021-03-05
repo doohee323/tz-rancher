@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
+sudo apt-get update -y
 sudo apt-get install openjdk-8-jdk -y
 cd /opt
-wget http://download.sonatype.com/nexus/3/nexus-3.22.0-02-unix.tar.gz
-sudo tar -xvf nexus-3.22.0-02-unix.tar.gz
-ln -s nexus-3.22.0-02 nexus
+wget https://download.sonatype.com/nexus/3/nexus-3.30.0-01-unix.tar.gz
+sudo tar -xvf nexus-3.30.0-01-unix.tar.gz
+ln -s nexus-3.30.0-01 nexus
 
 sudo groupadd nexus
 sudo useradd -m nexus -g nexus -s /bin/bash
