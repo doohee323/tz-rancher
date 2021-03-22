@@ -13,8 +13,11 @@ su - ubuntu
 curl --insecure -sfL https://192.168.0.180/v3/import/7ms892bw5pvjs9drjv4nddvfbkg27hgpfwt7x58pcn8t5cp5bxwb7k.yaml | kubectl apply -f -
 or
 
-wget https://192.168.0.180/v3/import/7ms892bw5pvjs9drjv4nddvfbkg27hgpfwt7x58pcn8t5cp5bxwb7k.yaml --no-check-certificate
-kubectl apply -f 7ms892bw5pvjs9drjv4nddvfbkg27hgpfwt7x58pcn8t5cp5bxwb7k.yaml
+wget https://192.168.0.232/v3/import/r627rshf6lqk698lgj9f484wf7bq9xbmkcj6mxnb84mclgtb997z88_c-78d4z.yaml --no-check-certificate
+#kubectl delete -f r627rshf6lqk698lgj9f484wf7bq9xbmkcj6mxnb84mclgtb997z88_c-78d4z.yaml
+kubectl apply -f r627rshf6lqk698lgj9f484wf7bq9xbmkcj6mxnb84mclgtb997z88_c-78d4z.yaml
+
+curl --insecure -sfL https://192.168.0.232/v3/import/r627rshf6lqk698lgj9f484wf7bq9xbmkcj6mxnb84mclgtb997z88_c-78d4z.yaml | kubectl apply -f -
 
 
 ########################################################################
