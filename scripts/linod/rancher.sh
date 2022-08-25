@@ -55,7 +55,7 @@ docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
 #sudo service docker restart
 
 yum install wget -y
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.22/rke_linux-amd64
 mv rke_linux-amd64 /usr/bin/rke
 chmod 755 /usr/bin/rke
 rke -v

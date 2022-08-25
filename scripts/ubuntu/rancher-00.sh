@@ -59,16 +59,24 @@ sudo apt-get install -y kubectl
 ##################################################################
 # - install rancher
 ##################################################################
+docker kill `docker ps | tail -n 1 | awk '{print $1}'`
 docker run -d --restart=unless-stopped \
-  -p 80:80 -p 443:443 \
+  -p 8080:80 -p 8443:443 \
   --privileged \
   rancher/rancher:latest
 
 sleep 120
 echo docker ps | grep 'rancher/rancher' | awk '{print $1}' | xargs docker logs -f
 
+docker logs `docker ps | grep 'rancher/rancher' | awk '{print $1}'`  2>&1 | grep "Bootstrap Password:"
+
+IP=`ifconfig | grep 'eth0:' -A 1 | tail -n 1 | awk '{print $2}'`
+
 echo "##################################################################"
-echo " Rancher URL: https://10.0.0.10"
+echo " Rancher URL: curl http://${IP}:8080"
+echo " Rancher URL: curl --insecure https://${IP}:8443"
+echo " ** out of vagrant"
+echo " Rancher URL: curl --insecure https://192.168.86.201:8443"
 echo "##################################################################"
 
 ##################################################################
@@ -76,7 +84,7 @@ echo "##################################################################"
 ##################################################################
 #sudo service docker restart
 
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.22/rke_linux-amd64
 sudo mv rke_linux-amd64 /usr/bin/rke
 sudo chmod 755 /usr/bin/rke
 rke -v
@@ -117,7 +125,7 @@ cd /home/ubuntu
 echo ########################################################################
 echo Need to run and follow two shells!!!
 echo
-bash /vagrant/scripts/ubuntu/rancher-01.sh
+echo bash /vagrant/scripts/ubuntu/rancher-01.sh
 echo bash /vagrant/scripts/ubuntu/rancher-02.sh
 echo bash /vagrant/scripts/ubuntu/rancher-03.sh
 echo ########################################################################

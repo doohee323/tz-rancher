@@ -14,16 +14,16 @@ cd /home/ubuntu
 # rke config    ## host -> k8s host
 #[+] Cluster Level SSH Private Key Path [~/.ssh/id_rsa]:
 #[+] Number of Hosts [1]:
-#[+] SSH Address of host (1) [none]: 192.168.0.126
+#[+] SSH Address of host (1) [none]: 192.168.86.201
 #[+] SSH Port of host (1) [22]:
-#[+] SSH Private Key Path of host (192.168.0.126) [none]: /home/ubuntu/.ssh/id_rsa
-#[+] SSH User of host (192.168.0.126) [ubuntu]: ubuntu
-#[+] Is host (192.168.0.126) a Control Plane host (y/n)? [y]:
-#[+] Is host (192.168.0.126) a Worker host (y/n)? [n]: y
-#[+] Is host (192.168.0.126) an etcd host (y/n)? [n]: y
-#[+] Override Hostname of host (192.168.0.126) [none]:
-#[+] Internal IP of host (192.168.0.126) [none]:
-#[+] Docker socket path on host (192.168.0.126) [/var/run/docker.sock]:
+#[+] SSH Private Key Path of host (192.168.86.201) [none]: /home/ubuntu/.ssh/id_rsa
+#[+] SSH User of host (192.168.86.201) [ubuntu]: ubuntu
+#[+] Is host (192.168.86.201) a Control Plane host (y/n)? [y]:
+#[+] Is host (192.168.86.201) a Worker host (y/n)? [n]: y
+#[+] Is host (192.168.86.201) an etcd host (y/n)? [n]: y
+#[+] Override Hostname of host (192.168.86.201) [none]:
+#[+] Internal IP of host (192.168.86.201) [none]:
+#[+] Docker socket path on host (192.168.86.201) [/var/run/docker.sock]:
 #[+] Network Plugin Type (flannel, calico, weave, canal) [canal]:
 #[+] Authentication Strategy [x509]:
 #[+] Authorization Mode (rbac, none) [rbac]:
@@ -49,6 +49,7 @@ rm -Rf /home/ubuntu/kube_config_cluster.yml
 rke up
 
 ls /home/ubuntu/kube_config_cluster.yml
+sudo cp /home/ubuntu/kube_config_cluster.yml /vagrant/shared/
 
 exit 0
 

@@ -76,7 +76,7 @@ curl http://54.183.236.40
 #sudo service docker restart
 
 yum install wget -y
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.22/rke_linux-amd64
 mv rke_linux-amd64 /usr/bin/rke
 chmod 755 /usr/bin/rke
 rke -v
@@ -219,7 +219,7 @@ https://github.com/rancher/rke/releases
 https://github.com/rancher/rke/releases/tag/v1.1.7
 #yum install wget -y
 wget https://github.com/rancher/rke/releases/download/v1.1.7/rke_linux-amd64
-wget https://github.com/rancher/rke/releases/download/v1.2.1/rke_linux-amd64
+wget https://github.com/rancher/rke/releases/download/v1.2.22/rke_linux-amd64
 
 
 sudo mv rke_linux-amd64 /usr/bin/rke
